@@ -20,13 +20,13 @@ async function run(){
       const database = client.db('lifeLineDB');
       const doctorsCollection = database.collection('doctors');
       const servicesCollection = database.collection('services');
-      const bookingServiceCollection = database.collection('bookingService');
+      const bookingServicesCollection = database.collection('bookingServices');
 
       //get doctors api
         app.get('/doctors', async(req,res)=>{
           const cursor = doctorsCollection.find({});
-          const result = await cursor.toArray();
-          res.send({result});
+          const doctors = await cursor.toArray();
+          res.send({doctors});
         });
 
 
@@ -47,7 +47,7 @@ async function run(){
 
 
         //get services api
-        app.get('/doctors', async(req,res)=>{
+        app.get('/services', async(req,res)=>{
           const cursor = servicesCollection.find({});
           const services = await cursor.toArray();
           res.send({services});
@@ -70,31 +70,31 @@ async function run(){
         });
 
          //booking services
-         app.post("/bookingService", async (req, res) => {
+         app.post("/bookingServices", async (req, res) => {
           console.log(req.body);
-          const result = await bookingServiceCollection.insertOne(req.body);
+          const result = await bookingServicesCollection.insertOne(req.body);
           res.send(result);
         });
 
         //delete single booking
-        app.delete('/bookingService/:id', async (req,res) => {
+        app.delete('/bookingServices/:id', async (req,res) => {
           const id = req.params.id;
           const query = {_id: ObjectId(id)};
-          const result = await bookingServiceCollection.deleteOne(query);
+          const result = await bookingServicesCollection.deleteOne(query);
           res.json(result);
         });
 
         //get my booking
-        app.get("/bookingService/:email", async (req, res) => {
-          const result = await bookingServiceCollection.find({
+        app.get("/bookingServices/:email", async (req, res) => {
+          const result = await bookingServicesCollection.find({
             email: req.params.email,
           }).toArray();
           res.send(result);
         });
 
         //get all bookings
-        app.get("/bookingService", async (req, res) => {
-          const result = await bookingServiceCollection.find({}).toArray();
+        app.get("/bookingServices", async (req, res) => {
+          const result = await bookingServicesCollection.find({}).toArray();
           res.send(result);
           console.log(result);
         });
